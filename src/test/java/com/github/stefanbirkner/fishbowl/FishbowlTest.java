@@ -18,6 +18,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(HierarchicalContextRunner.class)
 public class FishbowlTest {
+    private static final Error DUMMY_ERROR = new Error();
     private static final Throwable DUMMY_EXCEPTION = new Exception();
     private static final RuntimeException DUMMY_RUNTIME_EXCEPTION = new RuntimeException();
     private static final Statement DO_NOTHING = new Statement() {
@@ -105,6 +106,17 @@ public class FishbowlTest {
         }
 
         @Test
+        public void throws_the_Error_that_is_thrown_by_the_provided_statement() {
+            thrown.expect(sameInstance(DUMMY_ERROR));
+            wrapCheckedException(new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    throw DUMMY_ERROR;
+                }
+            });
+        }
+
+        @Test
         public void throws_no_exception_if_the_provided_statement_throws_no_exception() {
             wrapCheckedException(DO_NOTHING);
         }
@@ -124,6 +136,17 @@ public class FishbowlTest {
             thrown.expect(sameInstance(DUMMY_RUNTIME_EXCEPTION));
             wrapCheckedException(
                 statementWithReturnValueThatThrows(DUMMY_RUNTIME_EXCEPTION));
+        }
+
+        @Test
+        public void throws_the_Error_that_is_thrown_by_the_provided_statement() {
+            thrown.expect(sameInstance(DUMMY_ERROR));
+            wrapCheckedException(new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    throw DUMMY_ERROR;
+                }
+            });
         }
 
         @Test

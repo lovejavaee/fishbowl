@@ -171,6 +171,8 @@ public class Fishbowl {
             statement.evaluate();
         } catch (RuntimeException e) {
             throw e;
+        } catch (Error e) {
+            throw e;
         } catch (Throwable e) {
             throw new WrappedException(e);
         }
